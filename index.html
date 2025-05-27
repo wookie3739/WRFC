@@ -191,6 +191,26 @@
         box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
         display: flex;
         align-items: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .feature-item:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      }
+
+      .feature-item.clickable {
+        position: relative;
+      }
+
+      .feature-item.clickable::after {
+        content: "👁️";
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        font-size: 1.2rem;
+        opacity: 0.6;
       }
 
       .feature-icon {
@@ -232,6 +252,175 @@
       .feature-desc {
         color: #666;
         font-size: 0.9rem;
+      }
+
+      /* 모달 스타일 */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+      }
+
+      .modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .modal-content {
+        background: white;
+        border-radius: 20px;
+        max-width: 90vw;
+        max-height: 90vh;
+        overflow: hidden;
+        position: relative;
+        transform: scale(0.8);
+        transition: transform 0.3s ease;
+      }
+
+      .modal-overlay.active .modal-content {
+        transform: scale(1);
+      }
+
+      .modal-header {
+        background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+        color: white;
+        padding: 20px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .modal-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+
+      .modal-close {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 2rem;
+        cursor: pointer;
+        padding: 0;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.3s ease;
+      }
+
+      .modal-close:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      .modal-body {
+        padding: 0;
+        position: relative;
+      }
+
+      /* 이미지 슬라이더 */
+      .image-slider {
+        position: relative;
+        width: 800px;
+        height: 500px;
+        overflow: hidden;
+      }
+
+      .image-container {
+        display: flex;
+        transition: transform 0.3s ease;
+        height: 100%;
+        width: max-content; /* 컨테이너 너비를 내용에 맞게 조정 */
+      }
+
+      .slide-image {
+        width: 800px;
+        height: 500px;
+        object-fit: contain; /* 이미지 비율 유지하면서 전체 보이기 */
+        flex-shrink: 0; /* 이미지 크기 축소 방지 */
+        flex-grow: 0; /* 이미지 크기 확대 방지 */
+        display: block;
+      }
+
+      .slider-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+      }
+
+      .slider-nav:hover {
+        background: rgba(0, 0, 0, 0.8);
+      }
+
+      .slider-nav.prev {
+        left: 20px;
+      }
+
+      .slider-nav.next {
+        right: 20px;
+      }
+
+      .slider-dots {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 10px;
+      }
+
+      .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .dot.active {
+        background: white;
+      }
+
+      .image-info {
+        padding: 20px 30px;
+        background: #f8f9fa;
+      }
+
+      .image-title {
+        font-weight: bold;
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+        color: #333;
+      }
+
+      .image-desc {
+        color: #666;
+        line-height: 1.5;
       }
 
       .timeline {
@@ -330,6 +519,16 @@
         .header h1 {
           font-size: 2rem;
         }
+
+        .image-slider {
+          width: 90vw;
+          height: 60vh;
+        }
+
+        .slide-image {
+          width: 90vw;
+          height: 60vh;
+        }
       }
     </style>
   </head>
@@ -373,10 +572,10 @@
         <div class="section completed">
           <h2><span class="emoji">✅</span>완성된 기능들</h2>
           <p style="margin-bottom: 20px; font-size: 1.1rem">
-            이미 작동하고 있는 기능들입니다
+            이미 작동하고 있는 기능들입니다 (클릭하면 스크린샷을 볼 수 있습니다)
           </p>
           <div class="feature-grid">
-            <div class="feature-item">
+            <div class="feature-item clickable" onclick="openModal('login')">
               <div class="feature-icon done">✓</div>
               <div class="feature-text">
                 <div class="feature-title">회원가입 & 로그인</div>
@@ -385,49 +584,49 @@
                 </div>
               </div>
             </div>
-            <div class="feature-item">
+            <div class="feature-item clickable" onclick="openModal('social')">
               <div class="feature-icon done">✓</div>
               <div class="feature-text">
                 <div class="feature-title">소셜 로그인</div>
                 <div class="feature-desc">카카오, 구글 등으로 간편 로그인</div>
               </div>
             </div>
-            <div class="feature-item">
+            <div class="feature-item clickable" onclick="openModal('password')">
               <div class="feature-icon done">✓</div>
               <div class="feature-text">
                 <div class="feature-title">아이디 및 비밀번호 찾기</div>
                 <div class="feature-desc">이메일로 비밀번호 재설정 가능</div>
               </div>
             </div>
-            <div class="feature-item">
+            <div class="feature-item clickable" onclick="openModal('selldok')">
               <div class="feature-icon done">✓</div>
               <div class="feature-text">
                 <div class="feature-title">셀독 게시판</div>
                 <div class="feature-desc">셀독 서비스 신청 및 관리 완료</div>
               </div>
             </div>
-            <div class="feature-item">
+            <div class="feature-item clickable" onclick="openModal('zerorisk')">
               <div class="feature-icon done">✓</div>
               <div class="feature-text">
                 <div class="feature-title">제로리스크 게시판</div>
                 <div class="feature-desc">제로리스크 신청 및 관리 완료</div>
               </div>
             </div>
-            <div class="feature-item">
+            <div class="feature-item clickable" onclick="openModal('layout')">
               <div class="feature-icon done">✓</div>
               <div class="feature-text">
                 <div class="feature-title">웹사이트 기본 틀</div>
                 <div class="feature-desc">헤더, 푸터, 기본 페이지 구조</div>
               </div>
             </div>
-            <div class="feature-item">
+            <div class="feature-item clickable" onclick="openModal('mobile')">
               <div class="feature-icon done">✓</div>
               <div class="feature-text">
                 <div class="feature-title">모바일 대응</div>
                 <div class="feature-desc">핸드폰에서도 잘 보이는 화면</div>
               </div>
             </div>
-            <div class="feature-item">
+            <div class="feature-item clickable" onclick="openModal('security')">
               <div class="feature-icon done">✓</div>
               <div class="feature-text">
                 <div class="feature-title">보안 시스템</div>
@@ -562,5 +761,293 @@
         </p>
       </div>
     </div>
+
+    <!-- 이미지 모달 -->
+    <div class="modal-overlay" id="imageModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title" id="modalTitle">기능 스크린샷</h3>
+          <button class="modal-close" onclick="closeModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="image-slider">
+            <div class="image-container" id="imageContainer">
+              <!-- 이미지들이 여기에 동적으로 추가됩니다 -->
+            </div>
+            <button class="slider-nav prev" onclick="prevImage()">
+              &#8249;
+            </button>
+            <button class="slider-nav next" onclick="nextImage()">
+              &#8250;
+            </button>
+            <div class="slider-dots" id="sliderDots">
+              <!-- 점들이 여기에 동적으로 추가됩니다 -->
+            </div>
+          </div>
+          <div class="image-info">
+            <div class="image-title" id="imageTitle">이미지 제목</div>
+            <div class="image-desc" id="imageDesc">이미지 설명</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // 각 기능별 이미지 데이터 (실제 경로로 변경해주세요)
+      const imageData = {
+        login: {
+          title: "회원가입 & 로그인",
+          images: [
+            {
+              src: "images/250527_login.png",
+              title: "로그인 화면",
+              desc: "사용자가 이메일과 비밀번호로 로그인하는 화면입니다.",
+            },
+            {
+              src: "images/250527_signup.png",
+              title: "회원가입 화면",
+              desc: "새로운 사용자가 계정을 생성하는 화면입니다.",
+            },
+            {
+              src: "images/250527_signup_detail.png",
+              title: "회원가입 상세 화면",
+              desc: "추가 정보를 입력하는 회원가입 상세 화면입니다.",
+            },
+            {
+              src: "images/250527_signup_detail_complete.png",
+              title: "회원가입 완료 화면",
+              desc: "회원가입이 성공적으로 완료된 화면입니다.",
+            },
+          ],
+        },
+        password: {
+          title: "아이디 찾기",
+          images: [
+            {
+              src: "images/250527_find_account.png",
+              title: "아이디 찾기 화면",
+              desc: "인증 코드와 이메일을 입력하여 아이디를 찾을 수 있습니다.",
+            },
+            {
+              src: "images/250527_find_id.png",
+              title: "아이디 찾기 화면",
+              desc: "인증 코드와 이메일을 입력하여 아이디를 찾을 수 있습니다.",
+            },
+            {
+              src: "images/250527_find_id_complete.png",
+              title: "아이디 찾기 화면",
+              desc: "인증 코드와 이메일을 입력하여 아이디를 찾을 수 있습니다.",
+            },
+            {
+              src: "images/250527_gmail1.png",
+              title: "이메일 인증",
+              desc: "발송된 이메일의 인증 코드를 확인하는 화면입니다.",
+            },
+          ],
+        },
+        selldok: {
+          title: "셀독 게시판",
+          images: [
+            {
+              src: "https://via.placeholder.com/800x500/795548/FFFFFF?text=셀독+게시판",
+              title: "셀독 게시판 목록",
+              desc: "셀독 서비스 신청글들을 확인할 수 있는 게시판입니다.",
+            },
+            {
+              src: "https://via.placeholder.com/800x500/607D8B/FFFFFF?text=신청서+작성",
+              title: "신청서 작성",
+              desc: "셀독 서비스 신청서를 작성하는 화면입니다.",
+            },
+          ],
+        },
+        zerorisk: {
+          title: "제로리스크 게시판",
+          images: [
+            {
+              src: "https://via.placeholder.com/800x500/FF5722/FFFFFF?text=제로리스크+게시판",
+              title: "제로리스크 게시판",
+              desc: "제로리스크 OEM 서비스 신청 및 관리 게시판입니다.",
+            },
+            {
+              src: "https://via.placeholder.com/800x500/3F51B5/FFFFFF?text=OEM+신청",
+              title: "OEM 신청 화면",
+              desc: "제로리스크 OEM 서비스를 신청하는 화면입니다.",
+            },
+          ],
+        },
+        // layout: {
+        //   title: "웹사이트 기본 틀",
+        //   images: [
+        //     {
+        //       src: "https://via.placeholder.com/800x500/009688/FFFFFF?text=헤더+네비게이션",
+        //       title: "헤더 & 네비게이션",
+        //       desc: "웹사이트 상단의 헤더와 메뉴 네비게이션입니다.",
+        //     },
+        //     {
+        //       src: "https://via.placeholder.com/800x500/8BC34A/FFFFFF?text=푸터+영역",
+        //       title: "푸터 영역",
+        //       desc: "웹사이트 하단의 푸터와 연락처 정보입니다.",
+        //     },
+        //   ],
+        // },
+        // mobile: {
+        //   title: "모바일 반응형",
+        //   images: [
+        //     {
+        //       src: "https://via.placeholder.com/800x500/CDDC39/FFFFFF?text=모바일+메인",
+        //       title: "모바일 메인 화면",
+        //       desc: "모바일 기기에서 보이는 메인 페이지입니다.",
+        //     },
+        //     {
+        //       src: "https://via.placeholder.com/800x500/FFEB3B/FFFFFF?text=모바일+메뉴",
+        //       title: "모바일 메뉴",
+        //       desc: "모바일에서의 햄버거 메뉴와 네비게이션입니다.",
+        //     },
+        //   ],
+        // },
+        // security: {
+        //   title: "보안 시스템",
+        //   images: [
+        //     {
+        //       src: "https://via.placeholder.com/800x500/F44336/FFFFFF?text=보안+설정",
+        //       title: "보안 설정",
+        //       desc: "사용자 계정 보안 설정 화면입니다.",
+        //     },
+        //     {
+        //       src: "https://via.placeholder.com/800x500/E91E63/FFFFFF?text=2단계+인증",
+        //       title: "2단계 인증",
+        //       desc: "추가 보안을 위한 2단계 인증 설정입니다.",
+        //     },
+        //   ],
+        // },
+      };
+
+      let currentFeature = "";
+      let currentImageIndex = 0;
+
+      function openModal(feature) {
+        currentFeature = feature;
+        currentImageIndex = 0;
+
+        const data = imageData[feature];
+        if (!data) return;
+
+        // 모달 제목 설정
+        document.getElementById("modalTitle").textContent = data.title;
+
+        // 이미지 컨테이너 초기화
+        const imageContainer = document.getElementById("imageContainer");
+        imageContainer.innerHTML = "";
+
+        // 이미지들 추가
+        data.images.forEach((img, index) => {
+          const imgElement = document.createElement("img");
+          imgElement.src = img.src;
+          imgElement.alt = img.title;
+          imgElement.className = "slide-image";
+          imageContainer.appendChild(imgElement);
+        });
+
+        // 점(dots) 생성
+        const dotsContainer = document.getElementById("sliderDots");
+        dotsContainer.innerHTML = "";
+        data.images.forEach((_, index) => {
+          const dot = document.createElement("div");
+          dot.className = `dot ${index === 0 ? "active" : ""}`;
+          dot.onclick = () => goToSlide(index);
+          dotsContainer.appendChild(dot);
+        });
+
+        // 첫 번째 이미지 정보 표시
+        updateImageInfo();
+
+        // 모달 표시
+        document.getElementById("imageModal").classList.add("active");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeModal() {
+        document.getElementById("imageModal").classList.remove("active");
+        document.body.style.overflow = "auto";
+      }
+
+      function nextImage() {
+        const data = imageData[currentFeature];
+        if (!data) return;
+
+        currentImageIndex = (currentImageIndex + 1) % data.images.length;
+        updateSlider();
+      }
+
+      function prevImage() {
+        const data = imageData[currentFeature];
+        if (!data) return;
+
+        currentImageIndex =
+          currentImageIndex === 0
+            ? data.images.length - 1
+            : currentImageIndex - 1;
+        updateSlider();
+      }
+
+      function goToSlide(index) {
+        currentImageIndex = index;
+        updateSlider();
+      }
+
+      function updateSlider() {
+        const imageContainer = document.getElementById("imageContainer");
+        const sliderWidth = document.querySelector(".image-slider").offsetWidth;
+        const translateX = -currentImageIndex * sliderWidth; // 슬라이더 너비만큼 이동
+        imageContainer.style.transform = `translateX(${translateX}px)`;
+
+        // 점(dots) 업데이트
+        const dots = document.querySelectorAll(".dot");
+        dots.forEach((dot, index) => {
+          dot.classList.toggle("active", index === currentImageIndex);
+        });
+
+        // 이미지 정보 업데이트
+        updateImageInfo();
+      }
+
+      function updateImageInfo() {
+        const data = imageData[currentFeature];
+        if (!data || !data.images[currentImageIndex]) return;
+
+        const currentImage = data.images[currentImageIndex];
+        document.getElementById("imageTitle").textContent = currentImage.title;
+        document.getElementById("imageDesc").textContent = currentImage.desc;
+      }
+
+      // ESC 키로 모달 닫기
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") {
+          closeModal();
+        }
+      });
+
+      // 모달 외부 클릭으로 닫기
+      document
+        .getElementById("imageModal")
+        .addEventListener("click", function (e) {
+          if (e.target === this) {
+            closeModal();
+          }
+        });
+
+      // 키보드 화살표로 이미지 넘기기
+      document.addEventListener("keydown", function (e) {
+        if (
+          document.getElementById("imageModal").classList.contains("active")
+        ) {
+          if (e.key === "ArrowLeft") {
+            prevImage();
+          } else if (e.key === "ArrowRight") {
+            nextImage();
+          }
+        }
+      });
+    </script>
   </body>
 </html>
